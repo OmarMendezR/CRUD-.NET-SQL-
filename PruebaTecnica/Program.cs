@@ -1,4 +1,20 @@
+using ProductApi.Data.Repositories.Interfaces;
+using PruebaTecnica.Data.Repositories;
+using PruebaTecnica.Data.Repositories.Interfaces;
+using PruebaTecnica.Service;
+using PruebaTecnica.Services;
+using PruebaTecnica.Services.Interfaces;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
+
 
 // Add services to the container.
 
