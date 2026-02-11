@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PruebaTecnica.DTOs;
 using PruebaTecnica.Models;
 using PruebaTecnica.Service.Interfaces;
 
@@ -17,63 +18,92 @@ namespace PruebaTecnica.Controllers
 
         // GET: api/products  get all products in the database
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAll() // ActionResult<IEnumerable<Product>> is the return type of the method, which indicates that it will return an HTTP response containing a collection of Product objects. The ActionResult class allows you to return different types of responses, such as Ok, NotFound, BadRequest, etc., along with the data.
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
         {
-            var products = await _service.GetAllAsync(); // Await the asynchronous operation to get all products from the service
-            return Ok(products); // Return an HTTP 200 OK response with the list of products as the response body
+            var products = await _service.GetAllAsync();
+
+            var result = products.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                CreatedAt = p.CreateAt
+            });
+
+            return Ok(result);
         }
+
 
         // GET: api/products/{id} get a product by id
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<ProductDto>> GetById(int id)
         {
             var product = await _service.GetByIdAsync(id);
 
             if (product == null)
-                return NotFound(); // If the product with the specified ID is not found, return an HTTP 404 Not Found response
+                return NotFound();
 
-            return Ok(product); 
+            var result = new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                CreatedAt = product.CreateAt
+            };
+
+            return Ok(result);
         }
+
 
         // POST: api/products create a new product
 
         [HttpPost]
-        public async Task<ActionResult<Product>> Create(Product product)
+        public async Task<ActionResult<ProductDto>> Create(CreateProductDto dto)
         {
-            try
+            var product = new Product
             {
-                var createdProduct = await _service.CreateAsync(product); // Await the asynchronous operation to create a new product using the service
+                Name = dto.Name,
+                Description = dto.Description,
+                Price = dto.Price
+            };
 
-                return CreatedAtAction(
-                    nameof(GetById),
-                    new { id = createdProduct.Id },
-                    createdProduct); // Return an HTTP 201 Created response with the location of the newly created product and the product data in the response body
-            }
-            catch (Exception ex) 
+            var createdProduct = await _service.CreateAsync(product);
+
+            var result = new ProductDto
             {
-                return BadRequest(ex.Message); // If an exception occurs during the creation of the product, return an HTTP 400 Bad Request response with the exception message as the response body
-            }
+                Id = createdProduct.Id,
+                Name = createdProduct.Name,
+                Description = createdProduct.Description,
+                Price = createdProduct.Price,
+                CreatedAt = createdProduct.CreateAt
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
+
 
         // PUT: api/products/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Product product)
+        public async Task<IActionResult> Update(int id, UpdateProductDto dto)
         {
-            try // The Update method is an HTTP PUT endpoint that allows updating an existing product. It takes the product ID as a route parameter and the updated product data in the request body. The method uses a try-catch block to handle potential exceptions that may occur during the update process.
+            var product = new Product
             {
-                var updated = await _service.UpdateAsync(id, product);
+                Name = dto.Name,
+                Description = dto.Description,
+                Price = dto.Price
+            };
 
-                if (!updated)
-                    return NotFound();
+            var updated = await _service.UpdateAsync(id, product);
 
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            if (!updated)
+                return NotFound();
+
+            return NoContent();
         }
+
 
         // DELETE: api/products/{id}
         [HttpDelete("{id}")]
