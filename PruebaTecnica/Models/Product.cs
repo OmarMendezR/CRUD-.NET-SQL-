@@ -8,6 +8,6 @@
         public decimal Price { get; set; }
         public bool IsActive { get; set; } = true; // Default value to true
 
-        public DateTime DateTime { get; set; } = DateTime.Now; // Default value to current date and time
+        public DateTime CreateAt { get; set; } = DateTime.Now; // Default value to current date and time
     }
 }
