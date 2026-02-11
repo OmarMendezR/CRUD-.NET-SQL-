@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Service\" />
+    <Folder Include="DTOs\" />
   </ItemGroup>
 
 </Project>
