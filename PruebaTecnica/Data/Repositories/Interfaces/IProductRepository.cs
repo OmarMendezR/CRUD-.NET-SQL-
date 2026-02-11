@@ -1,6 +1,8 @@
-﻿using PruebaTecnica.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using PruebaTecnica.Models;
 
-namespace ProductApi.Data.Repositories.Interfaces
+namespace PruebaTecnica.Data.Repositories.Interfaces
 {
     public interface IProductRepository
     {

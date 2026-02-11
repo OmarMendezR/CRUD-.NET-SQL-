@@ -1,6 +1,7 @@
 ﻿using PruebaTecnica.Models;
 
-namespace PruebaTecnica.Services.Interfaces
+
+namespace PruebaTecnica.Service.Interfaces
 {
     public interface IProductService
     {

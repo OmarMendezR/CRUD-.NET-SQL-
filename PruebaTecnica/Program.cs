@@ -1,13 +1,19 @@
-using ProductApi.Data.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using PruebaTecnica.Data.Context;
 using PruebaTecnica.Data.Repositories;
 using PruebaTecnica.Data.Repositories.Interfaces;
 using PruebaTecnica.Service;
-using PruebaTecnica.Services;
-using PruebaTecnica.Services.Interfaces;
+using PruebaTecnica.Service.Interfaces;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+//
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 

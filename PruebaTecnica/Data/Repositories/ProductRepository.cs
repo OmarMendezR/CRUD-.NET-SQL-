@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductApi.Data.Repositories.Interfaces;
 using PruebaTecnica.Data.Context;
 using PruebaTecnica.Data.Repositories.Interfaces;
 using PruebaTecnica.Models;
